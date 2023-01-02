@@ -1,0 +1,82 @@
+<!doctype html>
+<html>
+
+<head>
+    <title>Add Image</title>
+</head>
+
+<body>
+    <h1>Add Image</h1>
+    <canvas id="imageCanvas" width="400" height="300"></canvas>
+    <div>
+        <input type="file" id="imageLoader" name="img" accept="image/*">
+        <input type="range" id="zoom" min="0" max="100">
+        <input type="range" id="x" min="0" max="100">
+        <input type="range" id="y" min="0" max="100">
+        <button id="preview">Preview</button>
+    </div>
+    <canvas id="previewCanvas" width="400" height="300"></canvas>
+    <button id="downloadImage">Download Pic</button>
+    <img id="myimg"></img>
+</body>
+
+<script src="dither.js" type="text/javascript"></script>
+<script src="art.js" type="text/javascript"></script>
+
+<script type="module">
+    // Import the functions you need from the SDKs you need
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.14.0/firebase-app.js";
+    // import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.14.0/firebase-analytics.js";
+    // TODO: Add SDKs for Firebase products that you want to use
+    // https://firebase.google.com/docs/web/setup#available-libraries
+
+    // Add Firebase products that you want to use
+    import { } from "https://www.gstatic.com/firebasejs/9.14.0/firebase-auth.js"
+    import { getStorage, ref, getDownloadURL } from "https://www.gstatic.com/firebasejs/9.14.0/firebase-storage.js"
+
+    // Your web app's Firebase configuration
+    // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+    const firebaseConfig = {
+        apiKey: "AIzaSyCsKx2cpWSa7bxYfXbNUxwQMLucoveD5OE",
+        authDomain: "fart-4be5c.firebaseapp.com",
+        projectId: "fart-4be5c",
+        storageBucket: "fart-4be5c.appspot.com",
+        messagingSenderId: "860977176294",
+        appId: "1:860977176294:web:8c692ec37c775009e5a527",
+        measurementId: "G-ES2GWF5CFP"
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    // const analytics = getAnalytics(app);
+
+    const storage = getStorage(app);
+
+    // Create a storage reference from our storage service
+    const storageRef = ref(storage, '1.png');
+
+    getDownloadURL(storageRef)
+        .then((url) => {
+            // `url` is the download URL for 'images/stars.jpg'
+
+            // This can be downloaded directly:
+            const xhr = new XMLHttpRequest();
+            xhr.responseType = 'blob';
+            xhr.onload = (event) => {
+                const blob = xhr.response;
+            };
+            xhr.open('GET', url);
+            xhr.send();
+
+            // Or inserted into an <img> element
+            const img = document.getElementById('myimg');
+            img.setAttribute('src', url);
+        })
+        .catch((error) => {
+            // Handle any errors
+        });
+
+
+</script>
+
+</html>
